@@ -20,10 +20,13 @@ class TelegramBotService
         $this->entityManager = $entityManager;
     }
 
-    public function handleMessage(array $message): string
+    public function handleMessage(array $message): ?string
     {
         $chatId = $message['chat']['id'];
         $text = $message['text'] ?? '';
+        if (!$this->isBotCommand($text)) {
+            return null;
+        }
 
         // Получаем или создаем копилку для чата
         $piggyBank = $this->piggyBankRepository->findByChatId($chatId);
@@ -48,6 +51,11 @@ class TelegramBotService
             . "• добавь [сумма]р - добавить деньги\n"
             . "• отними [сумма]р - взять деньги\n"
             . "• покажи счёт - показать текущий баланс";
+    }
+
+    private function isBotCommand(string $text): bool
+    {
+        return preg_match('/^(\/|@OfficePiggyBankBot)/', $text) === 1;
     }
 
     private function handleAdd(PiggyBank $piggyBank, float $amount): string

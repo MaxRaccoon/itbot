@@ -36,8 +36,10 @@ class TelegramBotController extends AbstractController
             // Обрабатываем сообщение
             $responseText = $this->telegramBotService->handleMessage($message);
 
-            // Отправляем ответ
-            $this->sendMessage($chatId, $responseText);
+            if (!empty($responseText)) {
+                // Отправляем ответ
+                $this->sendMessage($chatId, $responseText);
+            }
         }
 
         return new JsonResponse(['status' => 'ok']);
