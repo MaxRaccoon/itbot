@@ -11,6 +11,11 @@ class SetWebhookCommand extends Command
 {
     protected static $defaultName = 'app:set-webhook';
 
+    public function __construct()
+    {
+        parent::__construct(self::$defaultName);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $token = getenv('TELEGRAM_BOT_TOKEN');
